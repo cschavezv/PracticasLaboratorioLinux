@@ -1,0 +1,4 @@
+1 PALABRA "holamundo"
+ 2 IDENTIFICADOR BASICO "comp1lad0r"
+ 3 NUMERO "12345"
+
