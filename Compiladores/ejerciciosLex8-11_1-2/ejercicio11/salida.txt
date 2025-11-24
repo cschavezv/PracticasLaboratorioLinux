@@ -1,0 +1,6 @@
+introduce una cadena:     introduce la llave para encriptar : 
+La frase encriptada es:
+Lspe$qyrhs0$iwxs$iw$gsqtmpehsviw
+
+La frase desencriptada es:
+Hola mundo, esto es compiladores
