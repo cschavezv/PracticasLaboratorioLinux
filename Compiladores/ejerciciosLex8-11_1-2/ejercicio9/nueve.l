@@ -1,59 +1,30 @@
 %{
-  #include <stdio.h>
-  int total = 0;
+    int total=0;
 %}
-
-WS  [ \t]+
-
+WS      [ \t]+
 %%
-/* pares sustractivos */
-IV  { total += 4;  printf("token: IV\n"); }
-IX  { total += 9;  printf("token: IX\n"); }
-XL  { total += 40; printf("token: XL\n"); }
-XC  { total += 90; printf("token: XC\n"); }
-CD  { total += 400;printf("token: CD\n"); }
-CM  { total += 900;printf("token: CM\n"); }
-
-/* simples */
-I   { total += 1;  printf("token: I\n"); }
-V   { total += 5;  printf("token: V\n"); }
-X   { total += 10; printf("token: X\n"); }
-L   { total += 50; printf("token: L\n"); }
-C   { total += 100;printf("token: C\n"); }
-D   { total += 500;printf("token: D\n"); }
-M   { total += 1000;printf("token: M\n"); }
-
-/* ignora espacios */
-{WS}  { /* nada */ }
-
-/* ignora carriage return por Windows */
-\r    { /* nada */ }
-
-/* fin de número */
-\n    {
-        int val = total;
-        total = 0;
-        return val;
-      }
-
-/* fin de archivo */
-<<EOF>> {
-        int val = total;
-        total = 0;
-        if (val != 0) return val;
-        return 0;
-      }
-
-/* cualquier cosa rara */
-.     {
-        printf("INVALIDO: [%s]\n", yytext);
-      }
+I       total += 1;
+IV      total += 4;
+V       total += 5;
+IX      total += 9;
+X       total += 10;
+XL      total += 40;
+L       total += 50;
+XC      total += 90;
+C       total += 100;
+CD      total += 400;
+D       total += 500;
+CM      total += 900;
+M       total += 1000;
+{WS}
+\n      { int temp = total; total = 0; return temp; }
 %%
+int main ()
+{
+    int primero, segundo;
+    primero = yylex ();
+    segundo = yylex ();
 
-int main() {
-  printf("=== LEX VERSION DEBUG ===\n");
-  int primero = yylex();
-  int segundo = yylex();
-  printf("%d + %d = %d\n", primero, segundo, primero + segundo);
-  return 0;
+    printf ("%d + %d = %d\n", primero, segundo, primero+segundo);
+    return 0;
 }

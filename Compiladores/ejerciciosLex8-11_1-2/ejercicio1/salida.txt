@@ -1,0 +1,4 @@
+Letras mayusculas : 2
+Letras minusculas : 17
+Digitos           : 6
+Espacios blancos  : 4
