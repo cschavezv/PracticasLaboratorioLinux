@@ -1,0 +1,323 @@
+   0  $accept : inicio $end
+
+   1  inicio : inicio linea
+   2         |
+
+   3  linea : NOMBRE '=' E '\n'
+   4        | E '\n'
+   5        | '\n'
+
+   6  E : E '+' T
+   7    | E '-' T
+   8    | T
+
+   9  T : T '*' F
+  10    | T '/' F
+  11    | F
+
+  12  F : F '^' P
+  13    | P
+
+  14  P : '(' E ')'
+  15    | NUMERO
+
+state 0
+	$accept : . inicio $end  (0)
+	inicio : .  (2)
+
+	.  reduce 2
+
+	inicio  goto 1
+
+
+state 1
+	$accept : inicio . $end  (0)
+	inicio : inicio . linea  (1)
+
+	$end  accept
+	NOMBRE  shift 2
+	NUMERO  shift 3
+	'\n'  shift 4
+	'('  shift 5
+	.  error
+
+	linea  goto 6
+	E  goto 7
+	T  goto 8
+	F  goto 9
+	P  goto 10
+
+
+state 2
+	linea : NOMBRE . '=' E '\n'  (3)
+
+	'='  shift 11
+	.  error
+
+
+state 3
+	P : NUMERO .  (15)
+
+	.  reduce 15
+
+
+state 4
+	linea : '\n' .  (5)
+
+	.  reduce 5
+
+
+state 5
+	P : '(' . E ')'  (14)
+
+	NUMERO  shift 3
+	'('  shift 5
+	.  error
+
+	E  goto 12
+	T  goto 8
+	F  goto 9
+	P  goto 10
+
+
+state 6
+	inicio : inicio linea .  (1)
+
+	.  reduce 1
+
+
+state 7
+	linea : E . '\n'  (4)
+	E : E . '+' T  (6)
+	E : E . '-' T  (7)
+
+	'\n'  shift 13
+	'+'  shift 14
+	'-'  shift 15
+	.  error
+
+
+state 8
+	E : T .  (8)
+	T : T . '*' F  (9)
+	T : T . '/' F  (10)
+
+	'*'  shift 16
+	'/'  shift 17
+	'\n'  reduce 8
+	'+'  reduce 8
+	'-'  reduce 8
+	')'  reduce 8
+
+
+state 9
+	T : F .  (11)
+	F : F . '^' P  (12)
+
+	'^'  shift 18
+	'\n'  reduce 11
+	'+'  reduce 11
+	'-'  reduce 11
+	'*'  reduce 11
+	'/'  reduce 11
+	')'  reduce 11
+
+
+state 10
+	F : P .  (13)
+
+	.  reduce 13
+
+
+state 11
+	linea : NOMBRE '=' . E '\n'  (3)
+
+	NUMERO  shift 3
+	'('  shift 5
+	.  error
+
+	E  goto 19
+	T  goto 8
+	F  goto 9
+	P  goto 10
+
+
+state 12
+	E : E . '+' T  (6)
+	E : E . '-' T  (7)
+	P : '(' E . ')'  (14)
+
+	'+'  shift 14
+	'-'  shift 15
+	')'  shift 20
+	.  error
+
+
+state 13
+	linea : E '\n' .  (4)
+
+	.  reduce 4
+
+
+state 14
+	E : E '+' . T  (6)
+
+	NUMERO  shift 3
+	'('  shift 5
+	.  error
+
+	T  goto 21
+	F  goto 9
+	P  goto 10
+
+
+state 15
+	E : E '-' . T  (7)
+
+	NUMERO  shift 3
+	'('  shift 5
+	.  error
+
+	T  goto 22
+	F  goto 9
+	P  goto 10
+
+
+state 16
+	T : T '*' . F  (9)
+
+	NUMERO  shift 3
+	'('  shift 5
+	.  error
+
+	F  goto 23
+	P  goto 10
+
+
+state 17
+	T : T '/' . F  (10)
+
+	NUMERO  shift 3
+	'('  shift 5
+	.  error
+
+	F  goto 24
+	P  goto 10
+
+
+state 18
+	F : F '^' . P  (12)
+
+	NUMERO  shift 3
+	'('  shift 5
+	.  error
+
+	P  goto 25
+
+
+state 19
+	linea : NOMBRE '=' E . '\n'  (3)
+	E : E . '+' T  (6)
+	E : E . '-' T  (7)
+
+	'\n'  shift 26
+	'+'  shift 14
+	'-'  shift 15
+	.  error
+
+
+state 20
+	P : '(' E ')' .  (14)
+
+	.  reduce 14
+
+
+state 21
+	E : E '+' T .  (6)
+	T : T . '*' F  (9)
+	T : T . '/' F  (10)
+
+	'*'  shift 16
+	'/'  shift 17
+	'\n'  reduce 6
+	'+'  reduce 6
+	'-'  reduce 6
+	')'  reduce 6
+
+
+state 22
+	E : E '-' T .  (7)
+	T : T . '*' F  (9)
+	T : T . '/' F  (10)
+
+	'*'  shift 16
+	'/'  shift 17
+	'\n'  reduce 7
+	'+'  reduce 7
+	'-'  reduce 7
+	')'  reduce 7
+
+
+state 23
+	T : T '*' F .  (9)
+	F : F . '^' P  (12)
+
+	'^'  shift 18
+	'\n'  reduce 9
+	'+'  reduce 9
+	'-'  reduce 9
+	'*'  reduce 9
+	'/'  reduce 9
+	')'  reduce 9
+
+
+state 24
+	T : T '/' F .  (10)
+	F : F . '^' P  (12)
+
+	'^'  shift 18
+	'\n'  reduce 10
+	'+'  reduce 10
+	'-'  reduce 10
+	'*'  reduce 10
+	'/'  reduce 10
+	')'  reduce 10
+
+
+state 25
+	F : F '^' P .  (12)
+
+	.  reduce 12
+
+
+state 26
+	linea : NOMBRE '=' E '\n' .  (3)
+
+	.  reduce 3
+
+
+13 terminals, 7 nonterminals
+16 grammar rules, 27 states
+
+grammar parser grammar
+symbol# value# symbol
+     0      0  $end
+     1    256  error
+     2    257  NOMBRE
+     3    258  NUMERO
+     4     61  '='
+     5     10  '\n'
+     6     43  '+'
+     7     45  '-'
+     8     42  '*'
+     9     47  '/'
+    10     94  '^'
+    11     40  '('
+    12     41  ')'
+    13    259  $accept
+    14    260  inicio
+    15    261  linea
+    16    262  E
+    17    263  T
+    18    264  F
+    19    265  P

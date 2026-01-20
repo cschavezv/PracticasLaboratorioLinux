@@ -1,0 +1,344 @@
+   0  $accept : inicio $end
+
+   1  inicio : inicio linea
+   2         |
+
+   3  linea : NOMBRE '=' E '\n'
+   4        | E '\n'
+   5        | '\n'
+
+   6  E : E '+' E
+   7    | E '-' E
+   8    | E '*' E
+   9    | E '/' E
+  10    | E '^' E
+  11    | '(' E ')'
+  12    | NUMERO
+
+state 0
+	$accept : . inicio $end  (0)
+	inicio : .  (2)
+
+	.  reduce 2
+
+	inicio  goto 1
+
+
+state 1
+	$accept : inicio . $end  (0)
+	inicio : inicio . linea  (1)
+
+	$end  accept
+	NOMBRE  shift 2
+	NUMERO  shift 3
+	'\n'  shift 4
+	'('  shift 5
+	.  error
+
+	linea  goto 6
+	E  goto 7
+
+
+state 2
+	linea : NOMBRE . '=' E '\n'  (3)
+
+	'='  shift 8
+	.  error
+
+
+state 3
+	E : NUMERO .  (12)
+
+	.  reduce 12
+
+
+state 4
+	linea : '\n' .  (5)
+
+	.  reduce 5
+
+
+state 5
+	E : '(' . E ')'  (11)
+
+	NUMERO  shift 3
+	'('  shift 5
+	.  error
+
+	E  goto 9
+
+
+state 6
+	inicio : inicio linea .  (1)
+
+	.  reduce 1
+
+
+state 7
+	linea : E . '\n'  (4)
+	E : E . '+' E  (6)
+	E : E . '-' E  (7)
+	E : E . '*' E  (8)
+	E : E . '/' E  (9)
+	E : E . '^' E  (10)
+
+	'\n'  shift 10
+	'+'  shift 11
+	'-'  shift 12
+	'*'  shift 13
+	'/'  shift 14
+	'^'  shift 15
+	.  error
+
+
+state 8
+	linea : NOMBRE '=' . E '\n'  (3)
+
+	NUMERO  shift 3
+	'('  shift 5
+	.  error
+
+	E  goto 16
+
+
+state 9
+	E : E . '+' E  (6)
+	E : E . '-' E  (7)
+	E : E . '*' E  (8)
+	E : E . '/' E  (9)
+	E : E . '^' E  (10)
+	E : '(' E . ')'  (11)
+
+	'+'  shift 11
+	'-'  shift 12
+	'*'  shift 13
+	'/'  shift 14
+	'^'  shift 15
+	')'  shift 17
+	.  error
+
+
+state 10
+	linea : E '\n' .  (4)
+
+	.  reduce 4
+
+
+state 11
+	E : E '+' . E  (6)
+
+	NUMERO  shift 3
+	'('  shift 5
+	.  error
+
+	E  goto 18
+
+
+state 12
+	E : E '-' . E  (7)
+
+	NUMERO  shift 3
+	'('  shift 5
+	.  error
+
+	E  goto 19
+
+
+state 13
+	E : E '*' . E  (8)
+
+	NUMERO  shift 3
+	'('  shift 5
+	.  error
+
+	E  goto 20
+
+
+state 14
+	E : E '/' . E  (9)
+
+	NUMERO  shift 3
+	'('  shift 5
+	.  error
+
+	E  goto 21
+
+
+state 15
+	E : E '^' . E  (10)
+
+	NUMERO  shift 3
+	'('  shift 5
+	.  error
+
+	E  goto 22
+
+
+state 16
+	linea : NOMBRE '=' E . '\n'  (3)
+	E : E . '+' E  (6)
+	E : E . '-' E  (7)
+	E : E . '*' E  (8)
+	E : E . '/' E  (9)
+	E : E . '^' E  (10)
+
+	'\n'  shift 23
+	'+'  shift 11
+	'-'  shift 12
+	'*'  shift 13
+	'/'  shift 14
+	'^'  shift 15
+	.  error
+
+
+state 17
+	E : '(' E ')' .  (11)
+
+	.  reduce 11
+
+
+18: shift/reduce conflict (shift 11, reduce 6) on '+'
+18: shift/reduce conflict (shift 12, reduce 6) on '-'
+18: shift/reduce conflict (shift 13, reduce 6) on '*'
+18: shift/reduce conflict (shift 14, reduce 6) on '/'
+18: shift/reduce conflict (shift 15, reduce 6) on '^'
+state 18
+	E : E . '+' E  (6)
+	E : E '+' E .  (6)
+	E : E . '-' E  (7)
+	E : E . '*' E  (8)
+	E : E . '/' E  (9)
+	E : E . '^' E  (10)
+
+	'+'  shift 11
+	'-'  shift 12
+	'*'  shift 13
+	'/'  shift 14
+	'^'  shift 15
+	'\n'  reduce 6
+	')'  reduce 6
+
+
+19: shift/reduce conflict (shift 11, reduce 7) on '+'
+19: shift/reduce conflict (shift 12, reduce 7) on '-'
+19: shift/reduce conflict (shift 13, reduce 7) on '*'
+19: shift/reduce conflict (shift 14, reduce 7) on '/'
+19: shift/reduce conflict (shift 15, reduce 7) on '^'
+state 19
+	E : E . '+' E  (6)
+	E : E . '-' E  (7)
+	E : E '-' E .  (7)
+	E : E . '*' E  (8)
+	E : E . '/' E  (9)
+	E : E . '^' E  (10)
+
+	'+'  shift 11
+	'-'  shift 12
+	'*'  shift 13
+	'/'  shift 14
+	'^'  shift 15
+	'\n'  reduce 7
+	')'  reduce 7
+
+
+20: shift/reduce conflict (shift 11, reduce 8) on '+'
+20: shift/reduce conflict (shift 12, reduce 8) on '-'
+20: shift/reduce conflict (shift 13, reduce 8) on '*'
+20: shift/reduce conflict (shift 14, reduce 8) on '/'
+20: shift/reduce conflict (shift 15, reduce 8) on '^'
+state 20
+	E : E . '+' E  (6)
+	E : E . '-' E  (7)
+	E : E . '*' E  (8)
+	E : E '*' E .  (8)
+	E : E . '/' E  (9)
+	E : E . '^' E  (10)
+
+	'+'  shift 11
+	'-'  shift 12
+	'*'  shift 13
+	'/'  shift 14
+	'^'  shift 15
+	'\n'  reduce 8
+	')'  reduce 8
+
+
+21: shift/reduce conflict (shift 11, reduce 9) on '+'
+21: shift/reduce conflict (shift 12, reduce 9) on '-'
+21: shift/reduce conflict (shift 13, reduce 9) on '*'
+21: shift/reduce conflict (shift 14, reduce 9) on '/'
+21: shift/reduce conflict (shift 15, reduce 9) on '^'
+state 21
+	E : E . '+' E  (6)
+	E : E . '-' E  (7)
+	E : E . '*' E  (8)
+	E : E . '/' E  (9)
+	E : E '/' E .  (9)
+	E : E . '^' E  (10)
+
+	'+'  shift 11
+	'-'  shift 12
+	'*'  shift 13
+	'/'  shift 14
+	'^'  shift 15
+	'\n'  reduce 9
+	')'  reduce 9
+
+
+22: shift/reduce conflict (shift 11, reduce 10) on '+'
+22: shift/reduce conflict (shift 12, reduce 10) on '-'
+22: shift/reduce conflict (shift 13, reduce 10) on '*'
+22: shift/reduce conflict (shift 14, reduce 10) on '/'
+22: shift/reduce conflict (shift 15, reduce 10) on '^'
+state 22
+	E : E . '+' E  (6)
+	E : E . '-' E  (7)
+	E : E . '*' E  (8)
+	E : E . '/' E  (9)
+	E : E . '^' E  (10)
+	E : E '^' E .  (10)
+
+	'+'  shift 11
+	'-'  shift 12
+	'*'  shift 13
+	'/'  shift 14
+	'^'  shift 15
+	'\n'  reduce 10
+	')'  reduce 10
+
+
+state 23
+	linea : NOMBRE '=' E '\n' .  (3)
+
+	.  reduce 3
+
+
+State 18 contains 5 shift/reduce conflicts.
+State 19 contains 5 shift/reduce conflicts.
+State 20 contains 5 shift/reduce conflicts.
+State 21 contains 5 shift/reduce conflicts.
+State 22 contains 5 shift/reduce conflicts.
+
+
+13 terminals, 4 nonterminals
+13 grammar rules, 24 states
+
+grammar parser grammar
+symbol# value# symbol
+     0      0  $end
+     1    256  error
+     2    257  NOMBRE
+     3    258  NUMERO
+     4     61  '='
+     5     10  '\n'
+     6     43  '+'
+     7     45  '-'
+     8     42  '*'
+     9     47  '/'
+    10     94  '^'
+    11     40  '('
+    12     41  ')'
+    13    259  $accept
+    14    260  inicio
+    15    261  linea
+    16    262  E
