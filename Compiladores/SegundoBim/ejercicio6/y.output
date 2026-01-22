@@ -1,0 +1,319 @@
+   0  $accept : Calculadora $end
+
+   1  $$1 :
+
+   2  Calculadora : TKN_ID $$1 TKN_ASIGN Expresion TKN_PTOCOMA
+
+   3  Expresion : TKN_NUM
+   4            | Expresion TKN_MAS Expresion
+   5            | Expresion TKN_MENOS Expresion
+   6            | Expresion TKN_MULT Expresion
+   7            | Expresion TKN_DIV Expresion
+   8            | TKN_PAA Expresion TKN_PAC
+   9            | TKN_COS TKN_PAA Expresion TKN_PAC
+  10            | TKN_SEN TKN_PAA Expresion TKN_PAC
+
+state 0
+	$accept : . Calculadora $end  (0)
+
+	TKN_ID  shift 1
+	.  error
+
+	Calculadora  goto 2
+
+
+state 1
+	Calculadora : TKN_ID . $$1 TKN_ASIGN Expresion TKN_PTOCOMA  (2)
+	$$1 : .  (1)
+
+	.  reduce 1
+
+	$$1  goto 3
+
+
+state 2
+	$accept : Calculadora . $end  (0)
+
+	$end  accept
+
+
+state 3
+	Calculadora : TKN_ID $$1 . TKN_ASIGN Expresion TKN_PTOCOMA  (2)
+
+	TKN_ASIGN  shift 4
+	.  error
+
+
+state 4
+	Calculadora : TKN_ID $$1 TKN_ASIGN . Expresion TKN_PTOCOMA  (2)
+
+	TKN_NUM  shift 5
+	TKN_PAA  shift 6
+	TKN_COS  shift 7
+	TKN_SEN  shift 8
+	.  error
+
+	Expresion  goto 9
+
+
+state 5
+	Expresion : TKN_NUM .  (3)
+
+	.  reduce 3
+
+
+state 6
+	Expresion : TKN_PAA . Expresion TKN_PAC  (8)
+
+	TKN_NUM  shift 5
+	TKN_PAA  shift 6
+	TKN_COS  shift 7
+	TKN_SEN  shift 8
+	.  error
+
+	Expresion  goto 10
+
+
+state 7
+	Expresion : TKN_COS . TKN_PAA Expresion TKN_PAC  (9)
+
+	TKN_PAA  shift 11
+	.  error
+
+
+state 8
+	Expresion : TKN_SEN . TKN_PAA Expresion TKN_PAC  (10)
+
+	TKN_PAA  shift 12
+	.  error
+
+
+state 9
+	Calculadora : TKN_ID $$1 TKN_ASIGN Expresion . TKN_PTOCOMA  (2)
+	Expresion : Expresion . TKN_MAS Expresion  (4)
+	Expresion : Expresion . TKN_MENOS Expresion  (5)
+	Expresion : Expresion . TKN_MULT Expresion  (6)
+	Expresion : Expresion . TKN_DIV Expresion  (7)
+
+	TKN_PTOCOMA  shift 13
+	TKN_MULT  shift 14
+	TKN_DIV  shift 15
+	TKN_MAS  shift 16
+	TKN_MENOS  shift 17
+	.  error
+
+
+state 10
+	Expresion : Expresion . TKN_MAS Expresion  (4)
+	Expresion : Expresion . TKN_MENOS Expresion  (5)
+	Expresion : Expresion . TKN_MULT Expresion  (6)
+	Expresion : Expresion . TKN_DIV Expresion  (7)
+	Expresion : TKN_PAA Expresion . TKN_PAC  (8)
+
+	TKN_MULT  shift 14
+	TKN_DIV  shift 15
+	TKN_MAS  shift 16
+	TKN_MENOS  shift 17
+	TKN_PAC  shift 18
+	.  error
+
+
+state 11
+	Expresion : TKN_COS TKN_PAA . Expresion TKN_PAC  (9)
+
+	TKN_NUM  shift 5
+	TKN_PAA  shift 6
+	TKN_COS  shift 7
+	TKN_SEN  shift 8
+	.  error
+
+	Expresion  goto 19
+
+
+state 12
+	Expresion : TKN_SEN TKN_PAA . Expresion TKN_PAC  (10)
+
+	TKN_NUM  shift 5
+	TKN_PAA  shift 6
+	TKN_COS  shift 7
+	TKN_SEN  shift 8
+	.  error
+
+	Expresion  goto 20
+
+
+state 13
+	Calculadora : TKN_ID $$1 TKN_ASIGN Expresion TKN_PTOCOMA .  (2)
+
+	.  reduce 2
+
+
+state 14
+	Expresion : Expresion TKN_MULT . Expresion  (6)
+
+	TKN_NUM  shift 5
+	TKN_PAA  shift 6
+	TKN_COS  shift 7
+	TKN_SEN  shift 8
+	.  error
+
+	Expresion  goto 21
+
+
+state 15
+	Expresion : Expresion TKN_DIV . Expresion  (7)
+
+	TKN_NUM  shift 5
+	TKN_PAA  shift 6
+	TKN_COS  shift 7
+	TKN_SEN  shift 8
+	.  error
+
+	Expresion  goto 22
+
+
+state 16
+	Expresion : Expresion TKN_MAS . Expresion  (4)
+
+	TKN_NUM  shift 5
+	TKN_PAA  shift 6
+	TKN_COS  shift 7
+	TKN_SEN  shift 8
+	.  error
+
+	Expresion  goto 23
+
+
+state 17
+	Expresion : Expresion TKN_MENOS . Expresion  (5)
+
+	TKN_NUM  shift 5
+	TKN_PAA  shift 6
+	TKN_COS  shift 7
+	TKN_SEN  shift 8
+	.  error
+
+	Expresion  goto 24
+
+
+state 18
+	Expresion : TKN_PAA Expresion TKN_PAC .  (8)
+
+	.  reduce 8
+
+
+state 19
+	Expresion : Expresion . TKN_MAS Expresion  (4)
+	Expresion : Expresion . TKN_MENOS Expresion  (5)
+	Expresion : Expresion . TKN_MULT Expresion  (6)
+	Expresion : Expresion . TKN_DIV Expresion  (7)
+	Expresion : TKN_COS TKN_PAA Expresion . TKN_PAC  (9)
+
+	TKN_MULT  shift 14
+	TKN_DIV  shift 15
+	TKN_MAS  shift 16
+	TKN_MENOS  shift 17
+	TKN_PAC  shift 25
+	.  error
+
+
+state 20
+	Expresion : Expresion . TKN_MAS Expresion  (4)
+	Expresion : Expresion . TKN_MENOS Expresion  (5)
+	Expresion : Expresion . TKN_MULT Expresion  (6)
+	Expresion : Expresion . TKN_DIV Expresion  (7)
+	Expresion : TKN_SEN TKN_PAA Expresion . TKN_PAC  (10)
+
+	TKN_MULT  shift 14
+	TKN_DIV  shift 15
+	TKN_MAS  shift 16
+	TKN_MENOS  shift 17
+	TKN_PAC  shift 26
+	.  error
+
+
+state 21
+	Expresion : Expresion . TKN_MAS Expresion  (4)
+	Expresion : Expresion . TKN_MENOS Expresion  (5)
+	Expresion : Expresion . TKN_MULT Expresion  (6)
+	Expresion : Expresion TKN_MULT Expresion .  (6)
+	Expresion : Expresion . TKN_DIV Expresion  (7)
+
+	.  reduce 6
+
+
+state 22
+	Expresion : Expresion . TKN_MAS Expresion  (4)
+	Expresion : Expresion . TKN_MENOS Expresion  (5)
+	Expresion : Expresion . TKN_MULT Expresion  (6)
+	Expresion : Expresion . TKN_DIV Expresion  (7)
+	Expresion : Expresion TKN_DIV Expresion .  (7)
+
+	.  reduce 7
+
+
+state 23
+	Expresion : Expresion . TKN_MAS Expresion  (4)
+	Expresion : Expresion TKN_MAS Expresion .  (4)
+	Expresion : Expresion . TKN_MENOS Expresion  (5)
+	Expresion : Expresion . TKN_MULT Expresion  (6)
+	Expresion : Expresion . TKN_DIV Expresion  (7)
+
+	TKN_MULT  shift 14
+	TKN_DIV  shift 15
+	TKN_PTOCOMA  reduce 4
+	TKN_MAS  reduce 4
+	TKN_MENOS  reduce 4
+	TKN_PAC  reduce 4
+
+
+state 24
+	Expresion : Expresion . TKN_MAS Expresion  (4)
+	Expresion : Expresion . TKN_MENOS Expresion  (5)
+	Expresion : Expresion TKN_MENOS Expresion .  (5)
+	Expresion : Expresion . TKN_MULT Expresion  (6)
+	Expresion : Expresion . TKN_DIV Expresion  (7)
+
+	TKN_MULT  shift 14
+	TKN_DIV  shift 15
+	TKN_PTOCOMA  reduce 5
+	TKN_MAS  reduce 5
+	TKN_MENOS  reduce 5
+	TKN_PAC  reduce 5
+
+
+state 25
+	Expresion : TKN_COS TKN_PAA Expresion TKN_PAC .  (9)
+
+	.  reduce 9
+
+
+state 26
+	Expresion : TKN_SEN TKN_PAA Expresion TKN_PAC .  (10)
+
+	.  reduce 10
+
+
+14 terminals, 4 nonterminals
+11 grammar rules, 27 states
+
+grammar parser grammar
+symbol# value# symbol
+     0      0  $end
+     1    256  error
+     2    257  TKN_NUM
+     3    258  TKN_ASIGN
+     4    259  TKN_PTOCOMA
+     5    260  TKN_MULT
+     6    261  TKN_DIV
+     7    262  TKN_MAS
+     8    263  TKN_MENOS
+     9    264  TKN_PAA
+    10    265  TKN_PAC
+    11    266  TKN_COS
+    12    267  TKN_SEN
+    13    268  TKN_ID
+    14    269  $accept
+    15    270  Calculadora
+    16    271  Expresion
+    17    272  $$1
